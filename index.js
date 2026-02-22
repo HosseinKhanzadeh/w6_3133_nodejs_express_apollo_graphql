@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import movieSchema from './schemas/schema.js';
 import movieResolvers from './resolvers/resolvers.js';
 import mongoose from 'mongoose';
+import fs from 'fs';
+import Movie from './models/movie.js';
 
 import { ApolloServer }  from '@apollo/server';
 import { expressMiddleware } from '@as-integrations/express5';
@@ -33,12 +35,12 @@ async function startServer() {
       expressMiddleware(server)
     );
 
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, async () => {
       console.log(`🚀 Server ready at http://localhost:${process.env.PORT}/graphql`);
 
       try {
-          connectDB()
-          console.log('Connected to MongoDB Atlas');
+        await connectDB();
+        console.log('Connected to MongoDB Atlas');
       } catch (error) {
         console.log(`Unable to connect to DB : ${error.message}`);
       }
