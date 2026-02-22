@@ -44,8 +44,38 @@ const resolvers = {
         throw err;
       }
     },
-    updateMovie: () => null,
-    deleteMovie: () => '',
+    updateMovie: async (_, { id, name, director_name, production_house, release_date, rating }) => {
+      try {
+        const update = {};
+        if (name !== undefined) update.name = name;
+        if (director_name !== undefined) update.director_name = director_name;
+        if (production_house !== undefined) update.production_house = production_house;
+        if (release_date !== undefined) update.release_date = release_date;
+        if (rating !== undefined) update.rating = rating;
+
+        const updatedMovie = await MovieModel.findByIdAndUpdate(id, update, {
+          new: true,
+          runValidators: true,
+        });
+        if (!updatedMovie) {
+          throw new Error('Movie not found');
+        }
+        return updatedMovie;
+      } catch (err) {
+        throw err;
+      }
+    },
+    deleteMovie: async (_, { id }) => {
+      try {
+        const deletedMovie = await MovieModel.findByIdAndDelete(id);
+        if (!deletedMovie) {
+          throw new Error('Movie not found');
+        }
+        return 'Movie deleted successfully';
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };
 
