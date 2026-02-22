@@ -29,7 +29,21 @@ const resolvers = {
     },
   },
   Mutation: {
-    addMovie: () => null,
+    addMovie: async (_, { name, director_name, production_house, release_date, rating }) => {
+      try {
+        const newMovie = new MovieModel({
+          name,
+          director_name,
+          production_house,
+          release_date,
+          rating,
+        });
+        await newMovie.save();
+        return newMovie;
+      } catch (err) {
+        throw err;
+      }
+    },
     updateMovie: () => null,
     deleteMovie: () => '',
   },
